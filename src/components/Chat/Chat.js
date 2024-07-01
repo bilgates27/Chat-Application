@@ -45,7 +45,7 @@ const Chat = () => {
         socket.off('message');
       };
     }
-  }, [socket]);
+  }, []);
 
   useEffect(() => {
     if (socket) {
@@ -58,7 +58,7 @@ const Chat = () => {
         socket.off('roomData');
       };
     }
-  }, [socket]);
+  }, []);
   
 
   const sendMessage = (event) => {
