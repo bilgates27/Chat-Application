@@ -1,11 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import { UserProvider } from './context/UserContext';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
   <UserProvider>
     <App />
-  </UserProvider>,
-  document.getElementById('root')
+  </UserProvider>
 );

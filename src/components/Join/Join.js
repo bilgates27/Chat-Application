@@ -12,6 +12,8 @@ const Join = () => {
   const handleSubmit = () => {
     if (name && room) {
       setUser({ name, room });
+      localStorage.setItem('name', name);
+      localStorage.setItem('room', room);
       navigate('/chat');
     }
   };

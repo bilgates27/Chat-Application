@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import io from 'socket.io-client';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import TextContainer from '../TextContainer/TextContainer';
 import Messages from '../Messages/Messages';
@@ -7,19 +8,25 @@ import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
 import './Chat.css';
 
-const ENDPOINT = process.env.REACT_APP_ENDPOINT;
+const ENDPOINT = "http://localhost:5000";
 
 let socket;
 
 const Chat = () => {
-  const { user } = useContext(UserContext);
-  const { name, room } = user;
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    if (name && room) {
+    const name = localStorage.getItem('name');
+    const room = localStorage.getItem('room');
+
+    if (!name || !room) {
+      navigate('/');
+    } else {
+      setUser({ name, room }); // Update context with retrieved values
       socket = io(ENDPOINT);
 
       socket.emit('join', { name, room }, (error) => {
@@ -29,41 +36,36 @@ const Chat = () => {
       });
 
       return () => {
-        socket.emit('disconnect');
+        socket.disconnect();
         socket.off();
       };
     }
-  }, [name, room]);
+  }, [navigate, setUser]);
 
   useEffect(() => {
+    const handleNewMessage = (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    };
+
+    const handleRoomData = ({ users }) => {
+      setUsers(users);
+    };
+
     if (socket) {
-      socket.on('message', (message) => {
-        setMessages((messages) => [...messages, message]);
-      });
+      socket.on('message', handleNewMessage);
+      socket.on('roomData', handleRoomData);
 
       return () => {
-        socket.off('message');
+        socket.off('message', handleNewMessage);
+        socket.off('roomData', handleRoomData);
       };
     }
   }, []);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('roomData', ({ users }) => {
-        console.log('Updated users:', users);  // Debugging line
-        setUsers(users);
-      });
-  
-      return () => {
-        socket.off('roomData');
-      };
-    }
-  }, []);
-  
 
   const sendMessage = (event) => {
+    const room = localStorage.getItem('room');
     event.preventDefault();
-  
+
     if (message && socket) {
       socket.emit('sendMessage', message, () => {
         setMessage('');
@@ -71,13 +73,12 @@ const Chat = () => {
       });
     }
   };
-  
 
   return (
     <div className="outerContainer">
       <div className="container">
-        <InfoBar room={room} />
-        <Messages messages={messages} name={name} />
+        <InfoBar room={user.room} />
+        <Messages messages={messages} name={user.name} />
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
       <TextContainer users={users} />
