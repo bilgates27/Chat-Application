@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import io from 'socket.io-client';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import TextContainer from '../TextContainer/TextContainer';
 import Messages from '../Messages/Messages';
@@ -9,20 +9,24 @@ import Input from '../Input/Input';
 import './Chat.css';
 
 const ENDPOINT = process.env.REACT_APP_ENDPOINT;
+
 let socket;
 
 const Chat = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
-  const { user } = useContext(UserContext);
-  const { name, room } = user;
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    const name = localStorage.getItem('name');
+    const room = localStorage.getItem('room');
+
     if (!name || !room) {
-      navigate('/'); // Redirect to '/' if name or room is missing
+      navigate('/');
     } else {
+      setUser({ name, room }); // Update context with retrieved values
       socket = io(ENDPOINT);
 
       socket.emit('join', { name, room }, (error) => {
@@ -36,7 +40,7 @@ const Chat = () => {
         socket.off();
       };
     }
-  }, [name, room, navigate]);
+  }, [navigate, setUser]);
 
   useEffect(() => {
     const handleNewMessage = (message) => {
@@ -59,6 +63,7 @@ const Chat = () => {
   }, []);
 
   const sendMessage = (event) => {
+    const room = localStorage.getItem('room');
     event.preventDefault();
 
     if (message && socket) {
@@ -72,8 +77,8 @@ const Chat = () => {
   return (
     <div className="outerContainer">
       <div className="container">
-        <InfoBar room={room} />
-        <Messages messages={messages} name={name} />
+        <InfoBar room={user.room} />
+        <Messages messages={messages} name={user.name} />
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
       <TextContainer users={users} />
