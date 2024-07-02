@@ -56,7 +56,7 @@ const Chat = () => {
         socket.off('roomData', handleRoomData);
       };
     }
-  }, [socket]);
+  }, []);
 
   const sendMessage = (event) => {
     event.preventDefault();
