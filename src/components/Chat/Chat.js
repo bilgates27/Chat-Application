@@ -8,6 +8,7 @@ import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
 import './Chat.css';
 
+
 const ENDPOINT = process.env.REACT_APP_ENDPOINT;
 
 let socket;
@@ -18,6 +19,7 @@ const Chat = () => {
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     const name = localStorage.getItem('name');
@@ -31,7 +33,7 @@ const Chat = () => {
 
       socket.emit('join', { name, room }, (error) => {
         if (error) {
-          alert(error);
+          navigate('/');
         }
       });
 
@@ -45,6 +47,10 @@ const Chat = () => {
   useEffect(() => {
     const handleNewMessage = (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
+
+      if (message.user === 'bot') {
+        setLoading(false); // Update loading state once greeting message is received
+      }
     };
 
     const handleRoomData = ({ users }) => {
@@ -76,11 +82,11 @@ const Chat = () => {
 
   return (
     <div className="outerContainer">
-      <div className="container">
-        <InfoBar room={user.room} />
-        <Messages messages={messages} name={user.name} />
-        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-      </div>
+        <div className="container">
+          <InfoBar room={user.room} />
+          <Messages messages={messages} name={user.name} loading={loading}/>
+          <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+        </div>
       <TextContainer users={users} />
     </div>
   );
