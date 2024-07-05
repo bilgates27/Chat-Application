@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Snackbar } from '@mui/material';
+import { Snackbar } from '@mui/material';
 import ReactEmoji from 'react-emoji';
 
 const Message = ({ message: { text, user }, name }) => {
