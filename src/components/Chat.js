@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import io from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../context/UserContext';
-import TextContainer from '../TextContainer/TextContainer';
-import Messages from '../Messages/Messages';
-import InfoBar from '../InfoBar/InfoBar';
-import Input from '../Input/Input';
-import './Chat.css';
+import { UserContext } from '../context/UserContext';
+import TextContainer from './TextContainer';
+import Messages from './Messages';
+import InfoBar from './InfoBar';
+import Input from './Input';
 
 const ENDPOINT = process.env.REACT_APP_ENDPOINT;
 

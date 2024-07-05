@@ -1,9 +1,7 @@
 import React from 'react';
 
-import onlineIcon from '../../icons/onlineIcon.png';
-import closeIcon from '../../icons/closeIcon.png';
-
-import './InfoBar.css';
+import onlineIcon from '../icons/onlineIcon.png';
+import closeIcon from '../icons/closeIcon.png';
 
 const InfoBar = ({ room }) => {
   const handleLeaveChat = () => {
