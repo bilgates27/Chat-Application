@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import io from 'socket.io-client';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
@@ -8,8 +8,6 @@ import InfoBar from './InfoBar';
 import Input from './Input';
 
 const ENDPOINT = process.env.REACT_APP_ENDPOINT;
-
-let socket;
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -22,15 +20,16 @@ const Chat = () => {
   const name = localStorage.getItem('name');
   const room = localStorage.getItem('room');
   const image = localStorage.getItem('photo');
+  const socket = useRef(null); // Use useRef for socket instance
 
   useEffect(() => {
     if (!name || !room) {
       navigate('/');
     } else {
       setUser({ name, room, image }); // Update context with retrieved values
-      socket = io(ENDPOINT);
+      socket.current = io(ENDPOINT);
 
-      socket.emit('join', { name, room, image }, (error) => {
+      socket.current.emit('join', { name, room, image }, (error) => {
         if (error) {
           alert(error); // Show error message
         } else {
@@ -39,11 +38,11 @@ const Chat = () => {
       });
 
       return () => {
-        socket.disconnect();
-        socket.off();
+        socket.current.disconnect();
+        socket.current.off();
       };
     }
-  }, [navigate, setUser]);
+  }, [name, room, image, navigate, setUser]);
 
   useEffect(() => {
     const handleNewMessage = (message) => {
@@ -54,13 +53,13 @@ const Chat = () => {
       setUsers(users);
     };
 
-    if (socket) {
-      socket.on('message', handleNewMessage);
-      socket.on('roomData', handleRoomData);
+    if (socket.current) {
+      socket.current.on('message', handleNewMessage);
+      socket.current.on('roomData', handleRoomData);
 
       return () => {
-        socket.off('message', handleNewMessage);
-        socket.off('roomData', handleRoomData);
+        socket.current.off('message', handleNewMessage);
+        socket.current.off('roomData', handleRoomData);
       };
     }
   }, []);
@@ -68,10 +67,10 @@ const Chat = () => {
   const sendMessage = (event) => {
     event.preventDefault();
 
-    if (message && socket) {
-      socket.emit('sendMessage', message, () => {
+    if (message && socket.current) {
+      socket.current.emit('sendMessage', message, () => {
         setMessage('');
-        socket.emit('roomData', { room });  // Request updated room data
+        socket.current.emit('roomData', { room });  // Request updated room data
       });
     }
   };
