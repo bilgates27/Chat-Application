@@ -19,19 +19,20 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
 
-  useEffect(() => {
-    const name = localStorage.getItem('name');
-    const room = localStorage.getItem('room');
+  const name = localStorage.getItem('name');
+  const room = localStorage.getItem('room');
+  const image = localStorage.getItem('photo');
 
+  useEffect(() => {
     if (!name || !room) {
       navigate('/');
     } else {
-      setUser({ name, room }); // Update context with retrieved values
+      setUser({ name, room, image }); // Update context with retrieved values
       socket = io(ENDPOINT);
 
-      socket.emit('join', { name, room }, (error) => {
+      socket.emit('join', { name, room, image }, (error) => {
         if (error) {
-          navigate('/');
+          alert(error); // Show error message
         } else {
           setLoading(false); // Update loading state once joined successfully
         }
@@ -65,7 +66,6 @@ const Chat = () => {
   }, []);
 
   const sendMessage = (event) => {
-    const room = localStorage.getItem('room');
     event.preventDefault();
 
     if (message && socket) {
@@ -79,7 +79,7 @@ const Chat = () => {
   return (
     <div className="outerContainer">
       <div className="container">
-        <InfoBar room={user.room} />
+        <InfoBar room={user.room} users={users} name={user.name} image={image} />
         <Messages messages={messages} name={user.name} loading={loading}/>
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>

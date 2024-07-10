@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Snackbar } from '@mui/material';
+import { Avatar, Snackbar } from '@mui/material';
 import ReactEmoji from 'react-emoji';
 
-const Message = ({ message: { text, user }, name }) => {
+const Message = ({ message: { text, user, image }, name }) => {
   const [open, setOpen] = useState(false);
   let isSentByCurrentUser = false;
 
   const trimmedName = name.trim().toLowerCase();
+  const img = localStorage.getItem('photo');
 
   if (user === trimmedName) {
     isSentByCurrentUser = true;
@@ -27,10 +28,27 @@ const Message = ({ message: { text, user }, name }) => {
       <Snackbar
         open={open}
         onClose={handleClose}
-        message={text}
+        autoHideDuration={5000}
+        message={<div style={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar
+            src={image}
+            sx={{ marginRight: '10px' }}
+          />
+          {text}
+        </div>}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
       />
       {isSentByCurrentUser ? (
         <div className="messageContainer justifyEnd">
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar
+              src={img}
+              sx={{ marginRight: '10px' }}
+              style={{ width: '20px', height: '20px' }}
+            /></div>
           <p className="sentText pr-10">{trimmedName}</p>
           <div className="messageBox backgroundBlue">
             <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
@@ -38,6 +56,12 @@ const Message = ({ message: { text, user }, name }) => {
         </div>
       ) : (
         <div className="messageContainer justifyStart">
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar
+              src={image}
+              sx={{ marginRight: '10px' }}
+              style={{ width: '20px', height: '20px' }}
+            /></div>
           <div className="messageBox backgroundLight">
             <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
           </div>
