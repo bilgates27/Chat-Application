@@ -62,10 +62,10 @@ const Message = ({ message: { text, user, image }, name }) => {
               sx={{ marginRight: '10px' }}
               style={{ width: '20px', height: '20px' }}
             /></div>
+          <p className="sentText pl-10">{user}</p>
           <div className="messageBox backgroundLight">
             <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
           </div>
-          <p className="sentText pl-10">{user}</p>
         </div>
       )}
     </>
