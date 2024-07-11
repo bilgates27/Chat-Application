@@ -26,6 +26,8 @@ const Join = () => {
       localStorage.setItem('room', room);
       localStorage.setItem('photo', imgRef.current.src);
       navigate('/chat');
+    }else{
+      alert('fill the name and room');
     }
   };
 

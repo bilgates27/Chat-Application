@@ -9,12 +9,16 @@ import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import { blue } from '@mui/material/colors';
-
+import 'boxicons/css/boxicons.min.css';
 import onlineIcon from '../icons/onlineIcon.png';
+import { useLocation } from 'react-router-dom';
 
 
 export default function SimpleDialog(props) {
   const { onClose, selectedValue, open, users } = props;
+  const room = localStorage.getItem('room');
+  const location = useLocation();
+  const [share, setShare] = React.useState('')
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -24,11 +28,27 @@ export default function SimpleDialog(props) {
     onClose(value);
   };
 
+  const handleShareButton = () => {
+    const currentUrl = `${window.location.origin}${location.pathname}${"/"+room}`;
+
+    // Copy the current URL to the clipboard
+    navigator.clipboard.writeText(currentUrl).then(() => {
+      console.log('URL copied to clipboard:', currentUrl, share);
+      setShare(currentUrl);
+
+      // Open WhatsApp with the copied URL
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`Check this out: ${currentUrl}`)}`;
+      window.open(whatsappUrl, '_blank');
+    }).catch(err => {
+      console.error('Failed to copy URL to clipboard:', err);
+    });
+  };
+
   return (
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>Active Participants</DialogTitle>
       <List sx={{ pt: 0 }}>
-        {users.map(({name, image}) => (
+        {users.map(({ name, image }) => (
           <ListItem disableGutters key={name}>
             <ListItemButton onClick={() => handleListItemClick(name)}>
               <ListItemAvatar>
@@ -49,7 +69,11 @@ export default function SimpleDialog(props) {
               <Avatar>
               </Avatar>
             </ListItemAvatar> */}
-            <ListItemText primary="Share Room" />
+            <button style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+              onClick={handleShareButton}
+            >
+              Share<i className='bx bx-link bx-flip-horizontal' style={{ marginLeft: '5px' }}></i>
+            </button>
           </ListItemButton>
         </ListItem>
       </List>
@@ -63,4 +87,4 @@ SimpleDialog.propTypes = {
   selectedValue: PropTypes.string.isRequired,
 };
 
- 
+

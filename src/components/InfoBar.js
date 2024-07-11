@@ -32,7 +32,7 @@ const InfoBar = ({ users, name, image }) => {
       <div className="leftInnerContainer">
         <img className="onlineIcon" src={onlineIcon} alt="online icon" />
         <img className="onlineIcon" src={image} alt="" style={{width: '40px', height: "40px", borderRadius: "50%"}} />
-        <h5><b>@{name.toLowerCase()}</b></h5>
+        <h5><b>@{name}</b></h5>
         {/* <h3>{room}</h3> */}
       </div>
       <div>

@@ -32,6 +32,7 @@ const Chat = () => {
       socket.current.emit('join', { name, room, image }, (error) => {
         if (error) {
           alert(error); // Show error message
+          navigate('/');
         } else {
           setLoading(false); // Update loading state once joined successfully
         }
@@ -79,7 +80,7 @@ const Chat = () => {
     <div className="outerContainer">
       <div className="container">
         <InfoBar room={user.room} users={users} name={user.name} image={image} />
-        <Messages messages={messages} name={user.name} loading={loading}/>
+        <Messages messages={messages} name={user.name} loading={loading} />
         <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
       <TextContainer users={users} />
