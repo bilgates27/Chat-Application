@@ -49,7 +49,7 @@ const Message = ({ message: { text, user, image }, name }) => {
               sx={{ marginRight: '10px' }}
               style={{ width: '20px', height: '20px' }}
             />
-          <p className="sentText pr-10">{trimmedName}</p>
+            <p className="sentText pr-10">{trimmedName}</p>
           </div>
           <div className="messageBox backgroundBlue">
             <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
@@ -57,20 +57,20 @@ const Message = ({ message: { text, user, image }, name }) => {
         </div>
       ) : (
         <div className="messageContainer justifyStart">
-          {user !== 'admin' && user !== 'bot' && 
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Avatar
-              src={image}
-              sx={{ marginRight: '10px' }}
-              style={{ width: '20px', height: '20px' }}
-            />
-          <p className="sentText pr-10">{user}</p>
-          </div>
+          {user !== 'admin' && user !== 'bot' &&
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <Avatar
+                src={image}
+                sx={{ marginRight: '10px' }}
+                style={{ width: '20px', height: '20px' }}
+              />
+              <p className="sentText pr-10">{user}</p>
+            </div>
           }
-          {user !== 'admin' && 
-          <div className={`${user === 'bot' ? "messageBox bot" : "messageBox backgroundLight"}`}>
-          <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
-          </div>}
+          {user !== 'admin' &&
+            <div className={`${user === 'bot' ? "messageBox bot" : "messageBox backgroundLight"}`}>
+              <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
+            </div>}
         </div>
       )}
     </>

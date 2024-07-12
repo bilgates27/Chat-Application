@@ -52,13 +52,14 @@ html,body{
     border-radius: 4px 4px 0 0;
     height: 60px;
     width: 100%;
+    padding: 0 10px; /* Added padding to the infoBar */
+    box-sizing: border-box; /* Ensures padding is included in height/width */
   }
   
   .leftInnerContainer {
     flex: 0.5;
     display: flex;
     align-items: center;
-    margin-left: 5%;
     color: white;
   }
   
@@ -66,8 +67,25 @@ html,body{
     display: flex;
     flex: 0.5;
     justify-content: flex-end;
-    margin-right: 5%;
   }
+  
+  .usernameAndParticipants {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10px; /* Added padding to maintain consistent spacing */
+  }
+  
+  .usernameAndParticipants h5 {
+    margin: 0;
+    margin-bottom: 4px; /* Adjust this value to reduce the gap */
+  }
+  
+  .usernameAndParticipants p {
+    margin: 0;
+    padding: 0; /* Ensures no extra space is added */
+  }
+  
   
   .onlineIcon {
     margin-right: 5%;
@@ -216,8 +234,8 @@ html,body{
   .App {
     width: 100vw;
     height: 100vh;
-    background: #fff;
-    color: #212121;
+    background: #000000;
+    color: #ffffff;
     font-family: "Open Sans", sans-serif;
     display: grid;
     place-items: center;
@@ -358,4 +376,9 @@ html,body{
   .bot{
     background: #42a5f5;
   } 
+  /*  */
+  .whatsapp{
+    border-radius: 50%;
+    background-color: #2e7d32;
+  }
   

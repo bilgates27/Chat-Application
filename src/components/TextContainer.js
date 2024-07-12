@@ -1,6 +1,5 @@
-import React from 'react';
-
-import onlineIcon from '../icons/onlineIcon.png';
+import { StyledBadge } from './share/StyledBadge';
+import { Avatar } from '@mui/material';
 
 const TextContainer = ({ users }) => (
   <div className="textContainer">
@@ -15,13 +14,19 @@ const TextContainer = ({ users }) => (
           <div>
             <h1>People currently chatting:</h1>
             <div className="activeContainer">
-              <h2>
-                {users.map(({ name }) => (
-                  <div key={name}>{name}
-                    <img alt="Online Icon" src={onlineIcon} />
+              <div>
+                {users.map(({ name, image }) => (
+                  <div key={name}>
+                    <StyledBadge
+                      overlap="circular"
+                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                      variant="dot"
+                    >
+                      <Avatar alt="Remy Sharp" src={image} />
+                    </StyledBadge>&nbsp;@{name}
                   </div>
                 ))}
-              </h2>
+              </div>
             </div>
           </div>
         )

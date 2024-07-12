@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-
-import onlineIcon from '../icons/onlineIcon.png';
 import closeIcon from '../icons/closeIcon.png';
 import SimpleDialog from './SimpleDialog';
+import Avatar from '@mui/material/Avatar';
+import { StyledBadge } from './share/StyledBadge';
 
 const InfoBar = ({ users, name, image }) => {
-
-
-  const [value,setValue] = useState(false)
+  const [value, setValue] = useState(false);
 
   const handleLeaveChat = () => {
     localStorage.removeItem('name');
@@ -16,27 +14,30 @@ const InfoBar = ({ users, name, image }) => {
   };
 
   const handleDialog = () => {
-    setValue(!value)
-  }
+    setValue(!value);
+  };
+
   const handleClose = () => {
     setValue(false);
   };
 
   return (
     <div className="infoBar">
-      <SimpleDialog
-        open={value}
-        onClose={handleClose}
-        users={users}
-      />
+      <SimpleDialog open={value} onClose={handleClose} users={users} />
       <div className="leftInnerContainer">
-        <img className="onlineIcon" src={onlineIcon} alt="online icon" />
-        <img className="onlineIcon" src={image} alt="" style={{width: '40px', height: "40px", borderRadius: "50%"}} />
-        <h5><b>@{name}</b></h5>
-        {/* <h3>{room}</h3> */}
-      </div>
-      <div>
-        <p onClick={handleDialog} style={{cursor: "pointer"}}>participants: {users.length}</p>
+        <StyledBadge
+          overlap="circular"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          variant="dot"
+        >
+          <Avatar alt="Remy Sharp" src={image} />
+        </StyledBadge>&nbsp;
+        <div className="usernameAndParticipants">
+          <h5>
+            <b style={{ color: '#000' }}>@{name?.toUpperCase()}</b>
+          </h5>
+          <p onClick={handleDialog} style={{ cursor: "pointer", color: '#000', margin: 0 }}>participants: {users.length}</p>
+        </div>
       </div>
       <div className="rightInnerContainer">
         <a href="/" onClick={handleLeaveChat}><img src={closeIcon} alt="close icon" /></a>
