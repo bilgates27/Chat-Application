@@ -378,7 +378,8 @@ html,body{
   } 
   /*  */
   .whatsapp{
-    border-radius: 50%;
-    background-color: #2e7d32;
+    border-radius: 90%;
+    background-color: #00E676;
+    cursor: pointer;
   }
   

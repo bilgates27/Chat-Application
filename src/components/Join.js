@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
@@ -16,6 +16,11 @@ const Join = () => {
 
   const images = [pfp1, pfp2, pfp3, pfp4, pfp5];
 
+  const getRandomImage = () => {
+    const randomIndex = Math.floor(Math.random() * images.length);
+    setCurrentImageIndex(randomIndex);
+  }
+
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -31,6 +36,10 @@ const Join = () => {
     }
   };
 
+  useEffect(() => {
+    getRandomImage();
+  },[]);
+
   const handleImageSwitching = () => {
     const newIndex = (currentImageIndex + 1) % images.length; // Calculate the next index in a circular manner
     setCurrentImageIndex(newIndex); // Update state with the new index
@@ -43,6 +52,7 @@ const Join = () => {
         <h3>Join A Chat</h3>
         <div>
           <img onClick={handleImageSwitching} ref={imgRef} src={images[currentImageIndex]} alt="" style={{ width: "100px", height: "100px", borderRadius: "50%" }} />
+          <img src="https://xsgames.co/randomusers/avatar.php?g=pixel" alt=""style={{ width: "100px", height: "100px", borderRadius: "50%" }} />
           <p onClick={handleImageSwitching}>Click the image to change profile</p>
         </div>
         <div>
@@ -51,7 +61,7 @@ const Join = () => {
         <div>
           <input placeholder="Room" className="joinInput mt-20" type="text" onChange={(event) => setRoom(event.target.value)} />
         </div>
-        <button className={'button mt-20'} type="submit" onClick={handleSubmit}>Sign In</button>
+        <button className={'button mt-20'} type="submit" onClick={handleSubmit}>join</button>
       </div>
     </div>
   );

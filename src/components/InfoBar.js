@@ -30,7 +30,7 @@ const InfoBar = ({ users, name, image }) => {
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           variant="dot"
         >
-          <Avatar alt="Remy Sharp" src={image} />
+        <Avatar alt="Remy Sharp" src={image} />
         </StyledBadge>&nbsp;
         <div className="usernameAndParticipants">
           <h5>
@@ -40,7 +40,7 @@ const InfoBar = ({ users, name, image }) => {
         </div>
       </div>
       <div className="rightInnerContainer">
-        <a href="/" onClick={handleLeaveChat}><img src={closeIcon} alt="close icon" /></a>
+        <a href="/" onClick={handleLeaveChat}><img src={closeIcon} alt="close icon" style={{width: '20px', height: '20px', marginRight: '20px'}}/></a>
       </div>
     </div>
   );
