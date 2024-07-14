@@ -44,7 +44,7 @@ const Chat = () => {
         socket.current.off();
       };
     }
-  }, [name, room, image, navigate, setUser]);
+  }, [name, room, image, navigate, setUser, setError]);
 
   useEffect(() => {
     const handleNewMessage = (message) => {
