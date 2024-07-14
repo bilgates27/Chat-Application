@@ -10,7 +10,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import 'boxicons/css/boxicons.min.css';
 import { StyledBadge } from './share/StyledBadge';
-import WhatsApp from './share/WhatsApp';
 
 
 export default function SimpleDialog(props) {
@@ -49,7 +48,6 @@ export default function SimpleDialog(props) {
               <Avatar>
               </Avatar>
             </ListItemAvatar> */}
-            <WhatsApp />
       </List>
     </Dialog>
   );

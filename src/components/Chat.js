@@ -11,7 +11,8 @@ const ENDPOINT = process.env.REACT_APP_ENDPOINT;
 
 const Chat = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, setError } = useContext(UserContext);
+  
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -31,7 +32,7 @@ const Chat = () => {
 
       socket.current.emit('join', { name, room, image }, (error) => {
         if (error) {
-          alert(error); // Show error message
+          setError(error);
           navigate('/');
         } else {
           setLoading(false); // Update loading state once joined successfully
