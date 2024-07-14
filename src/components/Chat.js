@@ -11,9 +11,8 @@ const ENDPOINT = process.env.REACT_APP_ENDPOINT;
 
 const Chat = () => {
   const navigate = useNavigate();
-  const { user, setUser, setError, error } = useContext(UserContext);
-  let newError = { nameError: '', roomError: '' };
-  
+  const { user, setUser, setError } = useContext(UserContext);
+
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -24,7 +23,6 @@ const Chat = () => {
   const image = localStorage.getItem('photo');
   const socket = useRef(null); // Use useRef for socket instance
   
-  
   useEffect(() => {
     if (!name || !room) {
       navigate('/');
@@ -32,10 +30,9 @@ const Chat = () => {
       setUser({ name, room, image }); // Update context with retrieved values
       socket.current = io(ENDPOINT);
 
-
       socket.current.emit('join', { name, room, image }, (error) => {
         if (error) {
-          newError.nameError = error;
+          const newError = { nameError: error, roomError: '' };
           setError(newError);
           navigate('/');
         } else {
@@ -81,10 +78,6 @@ const Chat = () => {
     }
   };
 
-
-  if (error) return;
-  
-  
   return (
     <div className="outerContainer">
       <div className="container">
