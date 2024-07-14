@@ -11,18 +11,20 @@ const ENDPOINT = process.env.REACT_APP_ENDPOINT;
 
 const Chat = () => {
   const navigate = useNavigate();
-  const { user, setUser, setError } = useContext(UserContext);
+  const { user, setUser, setError, error } = useContext(UserContext);
+  let newError = { nameError: '', roomError: '' };
   
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
-
+  
   const name = localStorage.getItem('name');
   const room = localStorage.getItem('room');
   const image = localStorage.getItem('photo');
   const socket = useRef(null); // Use useRef for socket instance
-
+  
+  
   useEffect(() => {
     if (!name || !room) {
       navigate('/');
@@ -30,9 +32,11 @@ const Chat = () => {
       setUser({ name, room, image }); // Update context with retrieved values
       socket.current = io(ENDPOINT);
 
+
       socket.current.emit('join', { name, room, image }, (error) => {
         if (error) {
-          setError(error);
+          newError.nameError = error;
+          setError(newError);
           navigate('/');
         } else {
           setLoading(false); // Update loading state once joined successfully
@@ -65,10 +69,10 @@ const Chat = () => {
       };
     }
   }, []);
-
+  
   const sendMessage = (event) => {
     event.preventDefault();
-
+    
     if (message && socket.current) {
       socket.current.emit('sendMessage', message, () => {
         setMessage('');
@@ -77,6 +81,10 @@ const Chat = () => {
     }
   };
 
+
+  if (error) return;
+  
+  
   return (
     <div className="outerContainer">
       <div className="container">

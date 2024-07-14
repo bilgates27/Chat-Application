@@ -35,9 +35,17 @@ const Join = () => {
       localStorage.setItem('name', name);
       localStorage.setItem('room', room);
       localStorage.setItem('photo', imgRef.current.src);
-      if (!error) return navigate('/chat');
+      navigate('/chat');
+      setError('');
     } else {
-      setError('Enter a name');
+      let newError = { nameError: '', roomError: '' };
+      if (name === '') {
+        newError.nameError = 'Enter a name';
+      }
+      if (room === '') {
+        newError.roomError = 'Enter a room';
+      }
+      setError(newError);
     }
   };
 
@@ -51,36 +59,6 @@ const Join = () => {
     imgRef.current.src = images[newIndex];
   };
 
-  const validateName = (value) => {
-    if (!value) {
-      setError('Name is required');
-    } else if (value.length < 3) {
-      setError('Name must be at least 3 characters');
-    } else {
-      setError('');
-    }
-  };
-
-  const handleNameChange = (event) => {
-    const { value } = event.target;
-    setName(value);
-    validateName(value);
-  };
-
-  const validateRoom = (value) => {
-    if (!value) {
-      setError('Room is required');
-    } else {
-      setError('');
-    }
-  };
-
-  const handleRoomChange = (event) => {
-    const { value } = event.target;
-    setRoom(value);
-    validateRoom(value);
-  };
-
   return (
     <div className="App">
       <div className="joinChatContainer">
@@ -92,31 +70,31 @@ const Join = () => {
         <div>
           <Box>
             <CustomTextField
-              error={error !== ''}
+              error={!!error.nameError}
               placeholder="Name"
               id="standard-error-helper-text"
               label="Name"
               value={name}
-              helperText={error}
+              helperText={error.nameError}
               variant="standard"
-              onChange={handleNameChange}
+              onChange={(e) => setName(e.target.value)}
             />
           </Box><br />
           <Box>
             <CustomTextField
-              error={error !== ''}
+              error={!!error.roomError}
               placeholder="Room"
               id="standard-error-helper-text"
               label="Room"
               value={room}
-              helperText={"Enter a room"}
+              helperText={error.roomError}
               variant="standard"
-              onChange={handleRoomChange}
+              onChange={(e) => setRoom(e.target.value)}
             />
           </Box>
         </div><br />
         <Stack spacing={2}>
-          <Button variant={`${error ? "outlined" : "contained"}`} color={`${error ? "error" : "success"}`} type="submit" onClick={handleSubmit}>
+          <Button variant={error.nameError || error.roomError ? "outlined" : "contained"} color={error.nameError || error.roomError ? "error" : "success"} type="submit" onClick={handleSubmit}>
             Join
           </Button>
         </Stack>
@@ -144,4 +122,3 @@ const CustomTextField = styled(TextField)(({ theme, error }) => ({
     color: 'white', // Input text color
   }
 }));
-
