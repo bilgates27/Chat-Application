@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
 import { Button, Stack } from '@mui/material';
 import CameraswitchOutlinedIcon from '@mui/icons-material/CameraswitchOutlined';
+import axios from 'axios'; // Import axios
 
 import pfp1 from '../icons/pfp1.jpg';
 import pfp2 from '../icons/pfp2.jpg';
@@ -29,14 +30,24 @@ const Join = () => {
   const { setUser, error, setError } = useContext(UserContext);
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (name && room) {
-      setUser({ name, room });
-      localStorage.setItem('name', name);
-      localStorage.setItem('room', room);
-      localStorage.setItem('photo', imgRef.current.src);
-      navigate('/chat');
-      setError('');
+      try {
+        const response = await axios.post(`${process.env.REACT_APP_ENDPOINT}/check-username`, { name, room });
+        if (response.data.available) {
+          setUser({ name, room });
+          localStorage.setItem('name', name);
+          localStorage.setItem('room', room);
+          localStorage.setItem('photo', imgRef.current.src);
+          navigate('/chat');
+          setError('');
+        } else {
+          setError({ nameError: 'The username is taken.' });
+        }
+      } catch (err) {
+        console.error(err);
+        setError({ nameError: 'An error occurred. Please try again.' });
+      }
     } else {
       let newError = { nameError: '', roomError: '' };
       if (name === '') {
