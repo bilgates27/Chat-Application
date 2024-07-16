@@ -4,7 +4,7 @@ import { UserContext } from '../context/UserContext';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
-import { Button, Stack } from '@mui/material';
+import { Backdrop, Button, CircularProgress, Stack } from '@mui/material';
 import CameraswitchOutlinedIcon from '@mui/icons-material/CameraswitchOutlined';
 import axios from 'axios'; // Import axios
 
@@ -19,6 +19,7 @@ const images = [pfp1, pfp2, pfp3, pfp4, pfp5]; // Move images outside the compon
 const Join = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
+  const [open, setOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // State to track current image index
   const imgRef = useRef(null); // Ref for the image element
 
@@ -31,6 +32,7 @@ const Join = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    setOpen(true);
     if (name && room) {
       try {
         const response = await axios.post(`${process.env.REACT_APP_ENDPOINT}/check-username`, { name, room });
@@ -40,15 +42,19 @@ const Join = () => {
           localStorage.setItem('room', room);
           localStorage.setItem('photo', imgRef.current.src);
           navigate('/chat');
+          setOpen(false);
           setError('');
         } else {
+          setOpen(false);
           setError({ nameError: 'The username is taken.' });
         }
       } catch (err) {
+        setOpen(false);
         console.error(err);
         setError({ nameError: 'An error occurred. Please try again.' });
       }
     } else {
+      setOpen(false);
       let newError = { nameError: '', roomError: '' };
       if (name === '') {
         newError.nameError = 'Enter a name';
@@ -73,6 +79,12 @@ const Join = () => {
   return (
     <div className="App">
       <div className="joinChatContainer">
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+      >
+        <CircularProgress color="success" />
+      </Backdrop>
         <h3>Join A Chat</h3>
         <div onClick={handleImageSwitching}>
           <img ref={imgRef} src={images[currentImageIndex]} alt="" style={{ width: "100px", height: "100px", borderRadius: "50%" }} />
