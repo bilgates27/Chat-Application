@@ -45,6 +45,7 @@ html,body{
   }
 
   .infoBar {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -146,11 +147,6 @@ html,body{
     width: 20%;
   }
   
-  .joinInput {
-    border-radius: 0;
-    padding: 15px 20px;
-    width: 100%;
-  }
   
   .heading {
     color: white;
@@ -203,9 +199,6 @@ html,body{
   .joinChatContainer h3 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-  }
-  .joinChatContainer input {
-   color: #fff;
   }
   
   .App {
@@ -359,4 +352,34 @@ html,body{
     background-color: #00E676;
     cursor: pointer;
   }
+  .statusDropDownOn {
+    animation: glow 6s forwards; /* Increased to 6 seconds */
+    display: flex; /* Ensures image and text are in the same line */
+    align-items: center; /* Center aligns items vertically */
+    justify-content: center; /* Center aligns items horizontally */
+    text-align: center; /* Centers text within the glowEffect div */
+  }
   
+  .statusDropDownOff {
+    display: none;
+  }
+  
+  @keyframes glow {
+    0% {
+      opacity: 1;
+      box-shadow: 0 0 10px 0px rgba(255, 255, 255, 0.8);
+    }
+    100% {
+      opacity: 0;
+      box-shadow: 0 0 20px 20px rgba(255, 255, 255, 0);
+    }
+  }
+  
+  .contentWrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  .contentWrapper img {
+    margin-right: 10px; /* Adjust spacing between image and text if needed */
+  }

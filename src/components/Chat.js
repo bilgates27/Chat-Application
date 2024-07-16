@@ -16,18 +16,18 @@ const Chat = () => {
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   
   const name = localStorage.getItem('name');
   const room = localStorage.getItem('room');
   const image = localStorage.getItem('photo');
-  const socket = useRef(null); // Use useRef for socket instance
+  const socket = useRef(null);
   
   useEffect(() => {
     if (!name || !room) {
       navigate('/');
     } else {
-      setUser({ name, room, image }); // Update context with retrieved values
+      setUser({ name, room, image });
       socket.current = io(ENDPOINT);
 
       socket.current.emit('join', { name, room, image }, (error) => {
@@ -36,7 +36,7 @@ const Chat = () => {
           setError(newError);
           navigate('/');
         } else {
-          setLoading(false); // Update loading state once joined successfully
+          setLoading(false);
         }
       });
 
@@ -73,10 +73,11 @@ const Chat = () => {
     if (message && socket.current) {
       socket.current.emit('sendMessage', message, () => {
         setMessage('');
-        socket.current.emit('roomData', { room });  // Request updated room data
+        socket.current.emit('roomData', { room });
       });
     }
   };
+
 
   return (
     <div className="outerContainer">
