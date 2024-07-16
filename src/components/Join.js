@@ -13,6 +13,7 @@ import pfp2 from '../icons/pfp2.jpg';
 import pfp3 from '../icons/pfp3.jpg';
 import pfp4 from '../icons/pfp4.jpg';
 import pfp5 from '../icons/pfp5.jpg';
+import { RoomContext } from '../context/RoomContext';
 
 const images = [pfp1, pfp2, pfp3, pfp4, pfp5]; // Move images outside the component
 
@@ -22,6 +23,8 @@ const Join = () => {
   const [open, setOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // State to track current image index
   const imgRef = useRef(null); // Ref for the image element
+  const { allRooms } = useContext(RoomContext);
+
 
   const getRandomImage = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * images.length);
@@ -70,6 +73,7 @@ const Join = () => {
     getRandomImage();
   }, [getRandomImage]);
 
+
   const handleImageSwitching = () => {
     const newIndex = (currentImageIndex + 1) % images.length; // Calculate the next index in a circular manner
     setCurrentImageIndex(newIndex); // Update state with the new index
@@ -79,12 +83,12 @@ const Join = () => {
   return (
     <div className="App">
       <div className="joinChatContainer">
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
-      >
-        <CircularProgress color="success" />
-      </Backdrop>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+        >
+          <CircularProgress color="success" />
+        </Backdrop>
         <h3>Join A Chat</h3>
         <div onClick={handleImageSwitching}>
           <img ref={imgRef} src={images[currentImageIndex]} alt="" style={{ width: "100px", height: "100px", borderRadius: "50%" }} />
@@ -120,6 +124,11 @@ const Join = () => {
           <Button variant={error.nameError || error.roomError ? "outlined" : "contained"} color={error.nameError || error.roomError ? "error" : "success"} type="submit" onClick={handleSubmit}>
             Join
           </Button>
+          <div className="room-container">
+          {allRooms.map((room, index) => (
+            <div key={index} className="room-item">{room}</div>
+          ))}
+        </div>
         </Stack>
       </div>
     </div>
