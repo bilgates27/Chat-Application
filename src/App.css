@@ -52,7 +52,7 @@ html,body{
     border-radius: 4px 4px 0 0;
     height: 60px;
     width: 100%;
-    padding: 0 10px; /* Added padding to the infoBar */
+    padding: 20px; /* Added padding to the infoBar */
     box-sizing: border-box; /* Ensures padding is included in height/width */
   }
   
