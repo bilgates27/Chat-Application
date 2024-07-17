@@ -1,10 +1,10 @@
 import React, { useState, useContext, useRef, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
-import { Backdrop, Button, CircularProgress, Stack } from '@mui/material';
+import { Avatar, Backdrop, Button, Chip, CircularProgress, Stack } from '@mui/material';
 import CameraswitchOutlinedIcon from '@mui/icons-material/CameraswitchOutlined';
 import axios from 'axios'; // Import axios
 
@@ -125,10 +125,20 @@ const Join = () => {
             Join
           </Button>
           <div className="room-container">
-          {allRooms.map((room, index) => (
-            <div key={index} className="room-item">{room}</div>
-          ))}
-        </div>
+            {allRooms.map((room, index) => (
+              <Link to={`/chat/${room}`} key={index} className="room-link">
+                <div className="room-item">
+                  <Stack direction="row" spacing={1}>
+                    <Chip
+                      avatar={<Avatar>{room[0].toUpperCase()}</Avatar>}
+                      label={room?.toUpperCase()}
+                      variant="outlined"
+                    />
+                  </Stack>
+                </div>
+              </Link>
+            ))}
+          </div>
         </Stack>
       </div>
     </div>

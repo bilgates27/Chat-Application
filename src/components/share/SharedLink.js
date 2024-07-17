@@ -9,7 +9,7 @@ import pfp5 from '../../icons/pfp5.jpg';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
-import { Button, Stack } from '@mui/material';
+import { Alert, Button, Stack } from '@mui/material';
 import CameraswitchOutlinedIcon from '@mui/icons-material/CameraswitchOutlined';
 import axios from 'axios'; // Import axios
 
@@ -61,7 +61,10 @@ const SharedLink = () => {
   return (
     <div className="App">
       <div className="joinChatContainer">
-        <h3>Join A Chat</h3>
+      {error.nameError && <Stack sx={{ width: '100%' }} spacing={2}>
+        <Alert severity="error">{error.roomError || error.nameError}</Alert>
+      </Stack>}
+        <h3> Room <b style={{ color: 'blue' }}>{roomURL?.toLocaleUpperCase()}</b></h3>
         <div onClick={handleImageSwitching}>
           <img
             ref={imgRef}

@@ -272,23 +272,34 @@ html,body{
     }
   }
 
-.room-container {
-  display: inline-block;
-}
-
-.room-item {
-  display: inline-block;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid transparent;
-  transition: border-color 0.3s ease;
-}
-
-.room-item:hover {
-  border-color: #67c2ef;
-}
+  .room-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .room-item {
+    color: #FFFFFF;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    transition: border-color 0.3s ease;
+    background-color: #333; /* Add a background color for better visibility */
+  }
+  
+  .room-item:hover {
+    border-color: #67c2ef;
+  }
+  
+  .room-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
 
 
   /*  */
