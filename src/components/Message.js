@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Snackbar } from '@mui/material';
+import { Snackbar } from '@mui/material';
 import ReactEmoji from 'react-emoji';
 
 const Message = ({ message: { text, user, image }, name }) => {
@@ -7,7 +7,7 @@ const Message = ({ message: { text, user, image }, name }) => {
   let isSentByCurrentUser = false;
 
   const trimmedName = name.trim().toLowerCase();
-  const img = localStorage.getItem('photo');
+  const svgAvatar = localStorage.getItem('photo');
 
   if (user === trimmedName) {
     isSentByCurrentUser = true;
@@ -29,13 +29,12 @@ const Message = ({ message: { text, user, image }, name }) => {
         open={open}
         onClose={handleClose}
         autoHideDuration={5000}
-        message={<div style={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar
-            src={image}
-            sx={{ marginRight: '10px' }}
-          />
-          {text}
-        </div>}
+        message={
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div dangerouslySetInnerHTML={{ __html: image }} style={{ width: '20px', height: '20px', marginRight: '10px' }} ></div>
+            {text}
+          </div>
+        }
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'center',
@@ -44,11 +43,7 @@ const Message = ({ message: { text, user, image }, name }) => {
       {isSentByCurrentUser ? (
         <div className="messageContainer justifyEnd">
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Avatar
-              src={img}
-              sx={{ marginRight: '10px' }}
-              style={{ width: '20px', height: '20px' }}
-            />
+            <div dangerouslySetInnerHTML={{ __html: svgAvatar }} style={{ width: '20px', height: '20px', marginRight: '10px' }} />
             <p className="sentText pr-10">{trimmedName}</p>
           </div>
           <div className="messageBox backgroundBlue">
@@ -59,11 +54,7 @@ const Message = ({ message: { text, user, image }, name }) => {
         <div className="messageContainer justifyStart">
           {user !== 'admin' && user !== 'bot' &&
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar
-                src={image}
-                sx={{ marginRight: '10px' }}
-                style={{ width: '20px', height: '20px' }}
-              />
+              <div dangerouslySetInnerHTML={{ __html: image }} style={{ width: '20px', height: '20px', marginRight: '10px' }} />
               <p className="sentText pr-10">{user}</p>
             </div>
           }

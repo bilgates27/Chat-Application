@@ -88,7 +88,7 @@ const Join = () => {
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={open}
         >
-          <CircularProgress color="success" />
+          <CircularProgress color="success"/> its may take more time...
         </Backdrop>
         <h3>Join A Chat</h3>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
