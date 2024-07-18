@@ -33,18 +33,23 @@ export default function SimpleDialog(props) {
             <ListItemButton onClick={() => handleListItemClick(name)}>
               <ListItemAvatar>
                 <StyledBadge
-                      overlap="circular"
-                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                      variant="dot"
-                    >
-                      <Avatar alt="Remy Sharp" src={image} />
-                    </StyledBadge>&nbsp;
+                  overlap="circular"
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  variant="dot"
+                >
+                  <Avatar alt="User Avatar">
+                    <div
+                      style={{ width: '100%', height: '100%' }}
+                      dangerouslySetInnerHTML={{ __html: image }}
+                    />
+                  </Avatar>
+                </StyledBadge>&nbsp;
               </ListItemAvatar>
               <ListItemText primary={name} />
             </ListItemButton>
           </ListItem>
         ))}
-            {/* <ListItemAvatar>
+        {/* <ListItemAvatar>
               <Avatar>
               </Avatar>
             </ListItemAvatar> */}

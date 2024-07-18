@@ -1,24 +1,15 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
-import pfp1 from '../../icons/pfp1.jpg';
-import pfp2 from '../../icons/pfp2.jpg';
-import pfp3 from '../../icons/pfp3.jpg';
-import pfp4 from '../../icons/pfp4.jpg';
-import pfp5 from '../../icons/pfp5.jpg';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
-import { Alert, Button, Stack } from '@mui/material';
-import CameraswitchOutlinedIcon from '@mui/icons-material/CameraswitchOutlined';
-import axios from 'axios'; // Import axios
-
-const images = [pfp1, pfp2, pfp3, pfp4, pfp5];
+import { Alert, Button, Stack, CircularProgress } from '@mui/material';
+import axios from 'axios';
 
 const SharedLink = () => {
   const [username, setUsername] = useState('');
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const imgRef = useRef(null);
+  const [avatar, setAvatar] = useState('');
   const { setUser, error, setError } = useContext(UserContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,7 +24,7 @@ const SharedLink = () => {
           setUser({ username, roomURL });
           localStorage.setItem('name', username);
           localStorage.setItem('room', roomURL);
-          localStorage.setItem('photo', imgRef.current.src);
+          localStorage.setItem('photo', avatar); // Save avatar SVG to localStorage
           navigate('/chat');
           setError('');
         } else {
@@ -48,33 +39,50 @@ const SharedLink = () => {
     }
   };
 
-  const handleImageSwitching = () => {
-    const newIndex = (currentImageIndex + 1) % images.length;
-    setCurrentImageIndex(newIndex);
-    imgRef.current.src = images[newIndex];
+  // Function to fetch and display the SVG avatar
+  const fetchAvatar = async (name) => {
+    if (!name) {
+      setAvatar('');
+      return;
+    }
+
+    const url = `https://api.multiavatar.com/${encodeURIComponent(name)}.svg`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const svg = await response.text();
+      setAvatar(svg);
+    } catch (error) {
+      console.error('Error fetching the SVG:', error);
+    }
   };
 
+  // Fetch avatar when username changes
   useEffect(() => {
-    console.log(roomURL);
-  }, [roomURL]);
+    fetchAvatar(username);
+  }, [username]);
 
   return (
     <div className="App">
       <div className="joinChatContainer">
-      {error.nameError && <Stack sx={{ width: '100%' }} spacing={2}>
-        <Alert severity="error">{error.roomError || error.nameError}</Alert>
-      </Stack>}
+        {error.nameError && (
+          <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert severity="error">{error.roomError || error.nameError}</Alert>
+          </Stack>
+        )}
         <h3> Room <b style={{ color: 'blue' }}>{roomURL?.toLocaleUpperCase()}</b></h3>
-        <div onClick={handleImageSwitching}>
-          <img
-            ref={imgRef}
-            src={images[currentImageIndex]}
-            alt=""
-            style={{ width: '100px', height: '100px', borderRadius: '50%' }}
-          />
-          <CameraswitchOutlinedIcon />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+          {avatar ? (
+            <div dangerouslySetInnerHTML={{ __html: avatar }} style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
+          ) : (
+            <CircularProgress color="success" />
+          )}
         </div>
         <div>
+
           <Box>
             <CustomTextField
               error={!!error.nameError}
@@ -104,8 +112,6 @@ const SharedLink = () => {
   );
 };
 
-export default SharedLink;
-
 const CustomTextField = styled(TextField)(({ theme, error }) => ({
   '& .MuiInput-underline:before': {
     borderBottomColor: error ? 'red' : 'green', // Normal state
@@ -123,3 +129,5 @@ const CustomTextField = styled(TextField)(({ theme, error }) => ({
     color: 'white', // Input text color
   },
 }));
+
+export default SharedLink;

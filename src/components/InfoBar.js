@@ -42,7 +42,12 @@ const InfoBar = ({ users, name, room, image }) => {
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           variant="dot"
         >
-          <Avatar alt="Remy Sharp" src={image} />
+          <Avatar alt="User Avatar">
+            <div
+              style={{ width: '100%', height: '100%' }}
+              dangerouslySetInnerHTML={{ __html: image }}
+            />
+          </Avatar>
         </StyledBadge>&nbsp;
         <div className="usernameAndParticipants">
           <h5>

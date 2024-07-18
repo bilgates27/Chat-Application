@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyledBadge } from './share/StyledBadge';
 import { Avatar } from '@mui/material';
 
@@ -9,28 +10,32 @@ const TextContainer = ({ users }) => (
       <h2>Try it out right now! <span role="img" aria-label="emoji">⬅️</span></h2>
     </div>
     {
-      users
-        ? (
-          <div>
-            <h1>People currently chatting:</h1>
-            <div className="activeContainer">
-              <div>
-                {users.map(({ name, image }) => (
-                  <div key={name}>
-                    <StyledBadge
-                      overlap="circular"
-                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                      variant="dot"
-                    >
-                      <Avatar alt="Remy Sharp" src={image} />
-                    </StyledBadge>&nbsp;@{name}
-                  </div>
-                ))}
-              </div>
+      users && users.length > 0 && (
+        <div>
+          <h1>People currently chatting:</h1>
+          <div className="activeContainer">
+            <div>
+              {users.map(({ name, image }) => (
+                <div key={name} className="userContainer">
+                  <StyledBadge
+                    overlap="circular"
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    variant="dot"
+                  >
+                    <Avatar alt={name}>
+                      <div
+                        style={{ width: '100%', height: '100%' }}
+                        dangerouslySetInnerHTML={{ __html: image }}
+                      />
+                    </Avatar>
+                  </StyledBadge>
+                  &nbsp;@{name}
+                </div>
+              ))}
             </div>
           </div>
-        )
-        : null
+        </div>
+      )
     }
   </div>
 );
