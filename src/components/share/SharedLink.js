@@ -4,7 +4,7 @@ import { UserContext } from '../../context/UserContext';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/system';
-import { Alert, Button, Stack, CircularProgress } from '@mui/material';
+import { Alert, Button, Stack } from '@mui/material';
 import axios from 'axios';
 
 const SharedLink = () => {
@@ -78,7 +78,7 @@ const SharedLink = () => {
           {avatar ? (
             <div dangerouslySetInnerHTML={{ __html: avatar }} style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
           ) : (
-            <CircularProgress color="success" />
+            ""
           )}
         </div>
         <div>

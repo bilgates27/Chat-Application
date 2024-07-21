@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Snackbar } from '@mui/material';
 import ReactEmoji from 'react-emoji';
+import { ThemeContext } from '../context/ThemeContext';
 
 const Message = ({ message: { text, user, image }, name }) => {
   const [open, setOpen] = useState(false);
@@ -8,6 +9,8 @@ const Message = ({ message: { text, user, image }, name }) => {
 
   const trimmedName = name.trim().toLowerCase();
   const svgAvatar = localStorage.getItem('photo');
+  const { theme } = useContext(ThemeContext);
+
 
   if (user === trimmedName) {
     isSentByCurrentUser = true;
@@ -46,7 +49,7 @@ const Message = ({ message: { text, user, image }, name }) => {
             <div dangerouslySetInnerHTML={{ __html: svgAvatar }} style={{ width: '20px', height: '20px', marginRight: '10px' }} />
             <p className="sentText pr-10">{trimmedName}</p>
           </div>
-          <div className="messageBox backgroundBlue">
+          <div className={theme ? "messageBox backgroundBlue" : "messageBox messageDark"}>
             <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
           </div>
         </div>
@@ -59,8 +62,8 @@ const Message = ({ message: { text, user, image }, name }) => {
             </div>
           }
           {user !== 'admin' &&
-            <div className={`${user === 'bot' ? "messageBox bot" : "messageBox backgroundLight"}`}>
-              <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
+            <div className={`${user === 'bot' ? (theme ? 'messageBox bot' : 'messageBox botDark') : 'messageBox backgroundLight'}`}>
+            <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
             </div>}
         </div>
       )}

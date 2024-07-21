@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import closeIcon from '../icons/closeIcon.png';
 import SimpleDialog from './SimpleDialog';
 import Avatar from '@mui/material/Avatar';
 import { StyledBadge } from './share/StyledBadge';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel } from '@mui/material';
+import { MaterialUISwitch } from '../MUI/MaterialUISwitch';
+import { ThemeContext } from '../context/ThemeContext';
+
 
 const InfoBar = ({ users, name, room, image }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -33,8 +36,16 @@ const InfoBar = ({ users, name, room, image }) => {
     localStorage.removeItem('photo');
   };
 
+
+  const { setTheme, theme } = useContext(ThemeContext);
+
+
+  const handleTheme = () => {
+    setTheme(!theme);
+  }
+
   return (
-    <div className="infoBar">
+    <div className={!theme ? "infoBar infoBarDark" : "infoBar"}>
       <SimpleDialog open={value} onClose={handleDialogClose} users={users} />
       <div className="leftInnerContainer">
         <StyledBadge
@@ -56,7 +67,13 @@ const InfoBar = ({ users, name, room, image }) => {
           <p onClick={handleDialog} style={{ cursor: "pointer", color: '#000', margin: 0 }}>participants: {users.length}</p>
         </div>
       </div>
+
+
       <div className="rightInnerContainer">
+      <FormControlLabel onClick={handleTheme}
+        control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}
+        label={theme ? "Light" : "Dark"} 
+      />
         <div onClick={handleLeaveChatDialogOpen}>
           <img src={closeIcon} alt="close icon" style={{ width: '15px', height: '15px', marginRight: '5px' }} />
         </div>

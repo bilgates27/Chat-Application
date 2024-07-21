@@ -6,12 +6,15 @@ import TextContainer from './TextContainer';
 import Messages from './Messages';
 import InfoBar from './InfoBar';
 import Input from './Input';
+import { ThemeContext } from '../context/ThemeContext';
 
 const ENDPOINT = process.env.REACT_APP_ENDPOINT;
 
 const Chat = () => {
   const navigate = useNavigate();
   const { user, setUser, setError } = useContext(UserContext);
+  const { theme } = useContext(ThemeContext);
+
 
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
@@ -80,7 +83,7 @@ const Chat = () => {
 
 
   return (
-    <div className="outerContainer">
+    <div className={theme ? "outerContainer": "outerContainer outerContainerDark"}>
       <div className="container">
         <InfoBar room={user.room} users={users} name={user.name} image={image} />
         <Messages messages={messages} name={user.name} loading={loading} />

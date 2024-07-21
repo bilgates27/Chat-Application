@@ -95,7 +95,7 @@ const Join = () => {
           {avatar ? (
             <div dangerouslySetInnerHTML={{ __html: avatar }} style={{ width: '100px', height: '100px', borderRadius: '50%' }} />
           ) : (
-            <CircularProgress color="success" />
+            ""
           )}
         </div>
         <div>

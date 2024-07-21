@@ -26,7 +26,7 @@ export default function SimpleDialog(props) {
 
   return (
     <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>Active Participants</DialogTitle>
+      <DialogTitle>Active Members</DialogTitle>
       <List sx={{ pt: 0 }}>
         {users.map(({ name, image }) => (
           <ListItem disableGutters key={name}>
