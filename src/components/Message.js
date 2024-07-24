@@ -11,13 +11,12 @@ const Message = ({ message: { text, user, image }, name }) => {
   const svgAvatar = localStorage.getItem('photo');
   const { theme } = useContext(ThemeContext);
 
-
   if (user === trimmedName) {
     isSentByCurrentUser = true;
   }
 
   useEffect(() => {
-    if (user === 'admin') {
+    if (user === 'admin' || user === 'bot') {
       setOpen(true);
     }
   }, [user]);
@@ -34,7 +33,7 @@ const Message = ({ message: { text, user, image }, name }) => {
         autoHideDuration={5000}
         message={
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div dangerouslySetInnerHTML={{ __html: image }} style={{ width: '20px', height: '20px', marginRight: '10px' }} ></div>
+            <div dangerouslySetInnerHTML={{ __html: image }} style={{ width: '20px', height: '20px', marginRight: '10px' }}></div>
             {text}
           </div>
         }
@@ -63,7 +62,7 @@ const Message = ({ message: { text, user, image }, name }) => {
           }
           {user !== 'admin' &&
             <div className={`${user === 'bot' ? (theme ? 'messageBox bot' : 'messageBox botDark') : 'messageBox backgroundLight'}`}>
-            <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
+              <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
             </div>}
         </div>
       )}

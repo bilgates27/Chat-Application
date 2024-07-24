@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useLocation } from 'react-router-dom';
+import { ThemeContext } from '../../context/ThemeContext';
 
 
 const WhatsApp = ({ textContent }) => {
-
+    const { theme } = useContext(ThemeContext);
     const room = localStorage.getItem('room');
     const location = useLocation();
     const [share, setShare] = useState('')
@@ -29,9 +30,9 @@ const WhatsApp = ({ textContent }) => {
             onClick={handleShareButton}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
         >
-            <i style={{ fontSize: '30px' }} className="bx bxl-whatsapp whatsapp"></i>
+            <i style={{ fontSize: '30px' }} className={`bx bxl-whatsapp whatsapp ${!theme &&"whatsappDark"}`}></i>
             <b style={{ marginRight: '8px', color: 'rgba(0, 0, 0, 0.5)' }}>{textContent || ""}</b>
-            </div>
+        </div>
     )
 }
 

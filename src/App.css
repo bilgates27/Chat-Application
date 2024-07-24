@@ -1,6 +1,7 @@
 html,
 body {
-  background-color: #1A1A1D;
+  background-color: #000000;
+  overflow: hidden;
 }
 
 .outerContainer {
@@ -463,4 +464,7 @@ body {
 .textContainerDark p {
   color: black;
   /* Ensure all heading and paragraph text is black */
+}
+.whatsappDark{
+  background-color: #2979FF;
 }
