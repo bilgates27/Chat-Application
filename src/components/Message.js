@@ -38,7 +38,7 @@ const Message = ({ message: { text, user, image }, name }) => {
           </div>
         }
         anchorOrigin={{
-          vertical: 'top',
+          vertical: 'center',
           horizontal: 'center',
         }}
       />

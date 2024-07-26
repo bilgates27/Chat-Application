@@ -8,7 +8,7 @@ import InfoBar from './InfoBar';
 import Input from './Input';
 import { ThemeContext } from '../context/ThemeContext';
 import { db } from '../config/firebase-config';
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, setDoc } from 'firebase/firestore';
 
 const ENDPOINT = process.env.REACT_APP_ENDPOINT;
 
@@ -34,24 +34,20 @@ const Chat = () => {
       setUser({ name, room, image });
       socket.current = io(ENDPOINT);
 
-      socket.current.emit('join', { name, room, image }, async (error) => {
+      socket.current.emit('join', { name, room, image }, (error) => {
         if (error) {
           const newError = { nameError: error, roomError: '' };
           setError(newError);
           navigate('/');
-        } else {
-          // Fetch existing messages from Firestore
-          const roomDoc = await getDoc(doc(db, "rooms", room));
-          if (roomDoc.exists()) {
-            const existingMessages = roomDoc.data().messages;
-            const updatedMessages = existingMessages.map(msg => {
-              if (msg.user === "bot" && msg.text.includes("welcome to the room")) {
-                return { ...msg, text: `${name}, welcome to the room ${room}` };
-              }
-              return msg;
-            });
-            setMessages(updatedMessages);
-          }
+        }
+      });
+
+      // Set up real-time listener for Firestore messages
+      const messagesRef = doc(db, 'rooms', room);
+      const unsubscribe = onSnapshot(messagesRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const updatedMessages = docSnapshot.data().messages;
+          setMessages(updatedMessages);
           setLoading(false);
         }
       });
@@ -59,6 +55,7 @@ const Chat = () => {
       return () => {
         socket.current.disconnect();
         socket.current.off();
+        unsubscribe(); // Clean up Firestore listener
       };
     }
   }, [name, room, image, navigate, setUser, setError]);
@@ -87,36 +84,31 @@ const Chat = () => {
     event.preventDefault();
 
     if (message && socket.current) {
-      socket.current.emit('sendMessage', message, async () => {
+      socket.current.emit('sendMessage', message, () => {
         setMessage('');
         socket.current.emit('roomData', { room });
 
-        // Update messages in Firestore
-        if (user !== "bot") {
-          // Update messages in Firestore
-          const Ref = doc(db, "rooms", room);
-          await setDoc(Ref, {
-            messages: [...messages, { user: name, text: message, image }]
-          }, { merge: true });
-        }
+        // Update messages in Firestore (this will automatically update all clients)
+        const Ref = doc(db, 'rooms', room);
+        setDoc(Ref, {
+          messages: [...messages, { user: name, text: message, image }]
+        }, { merge: true });
       });
     }
   };
 
   const deleteMessages = async () => {
-    const Ref = doc(db, "rooms", room);
+    const Ref = doc(db, 'rooms', room);
     await updateDoc(Ref, {
       messages: []
     });
 
-    // Add the welcome message again
-    const welcomeMessage = { user: "bot", text: `${name}, welcome to the room ${room}`, image: '' };
+    const welcomeMessage = { user: 'bot', text: `${name}, welcome to the room ${room}`, image: '' };
     await setDoc(Ref, {
       messages: [welcomeMessage]
     }, { merge: true });
 
-    setMessages([welcomeMessage]);
-    navigate('./');
+    // No need to manually update messages state here; Firestore listener will handle it
   };
 
   return (
