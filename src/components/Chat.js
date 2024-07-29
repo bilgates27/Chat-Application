@@ -46,12 +46,9 @@ const Chat = () => {
       const messagesRef = doc(db, 'rooms', room);
       const unsubscribe = onSnapshot(messagesRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const updatedMessages = docSnapshot.data().messages || []; // Ensure it defaults to an empty array
+          const updatedMessages = docSnapshot.data().messages;
           setMessages(updatedMessages);
-          setLoading(false); // Set loading to false when messages are successfully retrieved
-        } else {
-          setMessages([]);
-          setLoading(false); // Set loading to false if no data exists
+          setLoading(false);
         }
       });
 
@@ -65,12 +62,10 @@ const Chat = () => {
 
   useEffect(() => {
     const handleNewMessage = (message) => {
-      console.log('New message received:', message);
       setMessages((prevMessages) => [...prevMessages, message]);
     };
 
     const handleRoomData = ({ users }) => {
-      console.log('Room data received:', users);
       setUsers(users);
     };
 
@@ -104,45 +99,24 @@ const Chat = () => {
 
   const deleteMessages = async () => {
     const Ref = doc(db, 'rooms', room);
+    await updateDoc(Ref, {
+      messages: []
+    });
 
-    try {
-      // Clear existing messages
-      await updateDoc(Ref, {
-        messages: []
-      });
+    const welcomeMessage = { user: 'bot', text: `${name}, welcome to the room ${room}`, image: '' };
+    await setDoc(Ref, {
+      messages: [welcomeMessage]
+    }, { merge: true });
 
-      // Add welcome message
-      const welcomeMessage = { user: 'bot', text: `${name}, welcome to the room ${room}`, image: '' };
-      await setDoc(Ref, {
-        messages: [welcomeMessage]
-      }, { merge: true });
-
-      console.log('Messages deleted and welcome message set.');
-    } catch (error) {
-      console.error('Error deleting messages and setting welcome message:', error);
-    }
+    // No need to manually update messages state here; Firestore listener will handle it
   };
 
   return (
     <div className={theme ? "outerContainer" : "outerContainer outerContainerDark"}>
       <div className="container">
-        <InfoBar 
-          room={user.room} 
-          users={users} 
-          name={user.name} 
-          image={image} 
-          deleteMessages={deleteMessages} 
-        />
-        <Messages 
-          messages={messages} 
-          name={user.name} 
-          loading={loading} 
-        />
-        <Input 
-          message={message} 
-          setMessage={setMessage} 
-          sendMessage={sendMessage} 
-        />
+        <InfoBar room={user.room} users={users} name={user.name} image={image} deleteMessages={deleteMessages} />
+        <Messages messages={messages} name={user.name} loading={loading} />
+        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
       </div>
       <TextContainer users={users} />
     </div>
