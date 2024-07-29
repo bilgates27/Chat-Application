@@ -2,8 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { styled } from '@mui/system';
+import { CustomTextField } from '../../MUI/MaterialUIStyled';
 import { Alert, Button, Stack } from '@mui/material';
 import axios from 'axios';
 
@@ -111,23 +110,5 @@ const SharedLink = () => {
     </div>
   );
 };
-
-const CustomTextField = styled(TextField)(({ theme, error }) => ({
-  '& .MuiInput-underline:before': {
-    borderBottomColor: error ? 'red' : 'green', // Normal state
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: error ? 'red' : 'green', // Focused state
-  },
-  '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-    borderBottomColor: error ? 'red' : 'green', // Hover state
-  },
-  '& .MuiInputLabel-root': {
-    color: 'white', // Label color
-  },
-  '& .MuiInputBase-input': {
-    color: 'white', // Input text color
-  },
-}));
 
 export default SharedLink;

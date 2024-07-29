@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import closeIcon from '../icons/closeIcon.png';
 import deleteIcon from '../icons/deleteicon.png';
-import SimpleDialog from './SimpleDialog';
+import SimpleDialog from '../MUI/SimpleDialog';
 import Avatar from '@mui/material/Avatar';
-import { StyledBadge } from './share/StyledBadge';
+import { StyledBadge } from '../MUI/MaterialUIStyled';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel } from '@mui/material';
-import { MaterialUISwitch } from '../MUI/MaterialUISwitch';
+import { MaterialUISwitch } from '../MUI/MaterialUIStyled';
 import { ThemeContext } from '../context/ThemeContext';
 
 const InfoBar = ({ users, name, room, image, deleteMessages }) => {

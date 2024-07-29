@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyledBadge } from './share/StyledBadge';
+import { StyledBadge } from '../MUI/MaterialUIStyled';
 import { Avatar } from '@mui/material';
 import { ThemeContext } from '../context/ThemeContext';
 

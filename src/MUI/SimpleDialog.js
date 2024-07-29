@@ -9,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import 'boxicons/css/boxicons.min.css';
-import { StyledBadge } from './share/StyledBadge';
+import { StyledBadge } from './MaterialUIStyled';
 
 
 export default function SimpleDialog(props) {
