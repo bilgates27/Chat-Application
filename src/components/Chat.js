@@ -47,7 +47,9 @@ const Chat = () => {
       const unsubscribe = onSnapshot(messagesRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
           const updatedMessages = docSnapshot.data().messages;
-          setMessages(updatedMessages);
+          // Exclude welcome messages from the bot
+          const filteredMessages = updatedMessages.filter(msg => !(msg.user === 'bot' && msg.text.includes('welcome to the room')));
+          setMessages(filteredMessages);
           setLoading(false);
         }
       });
@@ -62,7 +64,7 @@ const Chat = () => {
 
   useEffect(() => {
     const handleNewMessage = (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
+        setMessages((prevMessages) => [...prevMessages, message]);
     };
 
     const handleRoomData = ({ users }) => {
@@ -102,11 +104,6 @@ const Chat = () => {
     await updateDoc(Ref, {
       messages: []
     });
-
-    const welcomeMessage = { user: 'bot', text: `${name}, welcome to the room ${room}`, image: '' };
-    await setDoc(Ref, {
-      messages: [welcomeMessage]
-    }, { merge: true });
 
     // No need to manually update messages state here; Firestore listener will handle it
   };
