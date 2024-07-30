@@ -47,9 +47,7 @@ const Chat = () => {
       const unsubscribe = onSnapshot(messagesRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
           const updatedMessages = docSnapshot.data().messages;
-          // Exclude welcome messages from the bot
-          const filteredMessages = updatedMessages.filter(msg => !(msg.user === 'bot' && msg.text.includes('welcome to the room')));
-          setMessages(filteredMessages);
+          setMessages(updatedMessages);
           setLoading(false);
         }
       });
@@ -64,7 +62,7 @@ const Chat = () => {
 
   useEffect(() => {
     const handleNewMessage = (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
+      setMessages((prevMessages) => [...prevMessages, message]);
     };
 
     const handleRoomData = ({ users }) => {
@@ -113,7 +111,7 @@ const Chat = () => {
       <div className="container">
         <InfoBar room={user.room} users={users} name={user.name} image={image} deleteMessages={deleteMessages} />
         <Messages messages={messages} name={user.name} loading={loading} />
-        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+        <Input message={message} setMessage={setMessage} sendMessage={sendMessage} room={room} name={name}/>
       </div>
       <TextContainer users={users} />
     </div>

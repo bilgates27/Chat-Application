@@ -75,7 +75,7 @@ const InfoBar = ({ users, name, room, image, deleteMessages }) => {
         <div className="usernameAndParticipants">
           <h5>
             <b style={{ color: '#000' }}>@{name?.toUpperCase()}</b>
-          </h5>
+          </h5>     
           <p onClick={handleDialog} style={{ cursor: "pointer", color: '#000', margin: 0 }}>participants: {users.length}</p>
         </div>
       </div>

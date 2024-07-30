@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 
 
-const Input = ({ setMessage, sendMessage, message }) => {
+const Input = ({ setMessage, sendMessage, message, room, name }) => {
 
   const { theme } = useContext(ThemeContext);
   
@@ -11,7 +11,7 @@ const Input = ({ setMessage, sendMessage, message }) => {
     <input
       className="input"
       type="text"
-      placeholder="Type a message..."
+      placeholder={`${name?.toUpperCase()}, Welcome to the room ${room?.toUpperCase()}`}
       value={message}
       onChange={({ target: { value } }) => setMessage(value)}
       onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
